@@ -1,0 +1,50 @@
+---
+import { categories } from '../categories';
+const { title, description = 'Σύντομα κείμενα και βιβλιοκριτικές για την ιστορία των Εβραίων της Ελλάδας.' } = Astro.props;
+const full = title ? `${title} · Judeo-Greek Notes` : 'Judeo-Greek Notes';
+---
+<!doctype html>
+<html lang="el">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{full}</title>
+  <meta name="description" content={description} />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <header class="wrap">
+    <a class="brand" href="/">Judeo-Greek Notes</a>
+    <nav>{categories.map((c) => <a href={`/kategoria/${c.slug}/`}>{c.name}</a>)}</nav>
+  </header>
+  <main class="wrap"><slot /></main>
+  <footer class="wrap muted small">© {new Date().getFullYear()} Judeo-Greek Notes</footer>
+</body>
+</html>
+<style is:global>
+  :root { --paper:#F6F6F3; --ink:#1C2530; --muted:#5E6873; --rule:#D3D7D6; --blue:#1D4E7A; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--paper); color:var(--ink); font-family:'Source Serif 4',Georgia,serif; font-size:1.125rem; line-height:1.7; }
+  .wrap { max-width:44rem; margin:0 auto; padding:0 1.25rem; }
+  a { color:var(--blue); }
+  a:focus-visible { outline:2px solid var(--blue); outline-offset:3px; }
+  .muted { color:var(--muted); } .small { font-size:.9rem; line-height:1.5; }
+  header { padding-top:2.75rem; padding-bottom:1.25rem; border-bottom:1px solid var(--rule); margin-bottom:2rem; }
+  .brand { display:block; font-family:'EB Garamond',Georgia,serif; font-weight:500; font-size:2.6rem; line-height:1.1; color:var(--ink); text-decoration:none; margin-bottom:.9rem; }
+  nav { display:flex; flex-wrap:wrap; gap:.4rem 1.5rem; font-size:1rem; }
+  nav a { color:var(--ink); text-decoration:none; border-bottom:1px solid transparent; }
+  nav a:hover { border-bottom-color:var(--blue); }
+  h1,h2,h3 { font-family:'EB Garamond',Georgia,serif; font-weight:500; line-height:1.2; }
+  h1 { font-size:2.5rem; margin:0 0 .5rem; } h2 { font-size:1.7rem; margin:2.2rem 0 .5rem; }
+  .list { list-style:none; margin:0; padding:0; }
+  .list li { display:grid; grid-template-columns:9.5rem 1fr; gap:1rem; padding:1.1rem 0; border-bottom:1px solid var(--rule); }
+  .list time { font-size:.95rem; padding-top:.35rem; }
+  .title { font-family:'EB Garamond',Georgia,serif; font-size:1.55rem; line-height:1.25; color:var(--ink); text-decoration:none; }
+  .title:hover { color:var(--blue); }
+  .summary { margin:.4rem 0 0; }
+  article { max-width:40rem; } article p { margin:0 0 1.2rem; }
+  footer { margin-top:4rem; padding-top:1.25rem; padding-bottom:2.5rem; border-top:1px solid var(--rule); }
+  @media (max-width:36rem) { .list li { grid-template-columns:1fr; gap:.2rem; } .brand { font-size:2.1rem; } h1 { font-size:2rem; } }
+</style>

@@ -1,0 +1,10 @@
+---
+import Base from '../layouts/Base.astro';
+import ArticleList from '../components/ArticleList.astro';
+import { getCollection } from 'astro:content';
+const posts = (await getCollection('articles')).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+---
+<Base>
+  <p class="muted">Σύντομα κείμενα και βιβλιοκριτικές για την ιστορία των Εβραίων της Ελλάδας.</p>
+  <ArticleList posts={posts} />
+</Base>
