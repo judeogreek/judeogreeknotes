@@ -1,5 +1,8 @@
 {
   "name": "judeogreeknotes",
   "compatibility_date": "2025-01-01",
-  "assets": { "directory": "./dist" }
+  "assets": { "directory": "./dist" },
+  "routes": [
+    { "pattern": "judeogreeknotes.com", "custom_domain": true }
+  ]
 }
