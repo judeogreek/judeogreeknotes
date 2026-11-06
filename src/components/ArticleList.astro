@@ -1,16 +1,18 @@
 ---
+import { byName } from '../categories';
 const { posts } = Astro.props;
-const fmt = (d) => d.toLocaleDateString('el-GR', { year: 'numeric', month: 'long', day: 'numeric' });
+const fmt = (d, lang) => d.toLocaleDateString(lang === 'en' ? 'en-GB' : 'el-GR', { year: 'numeric', month: 'long', day: 'numeric' });
+const label = (p) => { const c = byName(p.data.category); return c ? (p.data.lang === 'en' ? c.en : c.el) : p.data.category; };
 ---
-{posts.length === 0 ? <p class="muted">Δεν υπάρχουν ακόμα άρθρα σε αυτή την κατηγορία.</p> : (
+{posts.length === 0 ? <p class="muted">Δεν υπάρχουν ακόμα άρθρα / No articles yet.</p> : (
 <ul class="list">
   {posts.map((p) => (
     <li>
-      <time class="muted" datetime={p.data.date.toISOString()}>{fmt(p.data.date)}</time>
+      <time class="muted" datetime={p.data.date.toISOString()}>{fmt(p.data.date, p.data.lang)}</time>
       <div>
-        <a class="title" href={`/arthra/${p.slug}/`}>{p.data.title}</a>
-        <div class="muted small">{p.data.category}</div>
-        {p.data.summary && <p class="summary">{p.data.summary}</p>}
+        <a class="title" lang={p.data.lang} href={`/arthra/${p.slug}/`}>{p.data.title}</a>
+        <div class="muted small">{label(p)}{p.data.lang === 'en' && <span class="tag">EN</span>}</div>
+        {p.data.summary && <p class="summary" lang={p.data.lang}>{p.data.summary}</p>}
       </div>
     </li>
   ))}

@@ -1,18 +1,22 @@
 ---
 import Base from '../../layouts/Base.astro';
 import { getCollection } from 'astro:content';
+import { byName } from '../../categories';
 export async function getStaticPaths() {
   const posts = await getCollection('articles');
   return posts.map((post) => ({ params: { slug: post.slug }, props: { post } }));
 }
 const { post } = Astro.props;
 const { Content } = await post.render();
-const date = post.data.date.toLocaleDateString('el-GR', { year: 'numeric', month: 'long', day: 'numeric' });
+const lang = post.data.lang;
+const date = post.data.date.toLocaleDateString(lang === 'en' ? 'en-GB' : 'el-GR', { year: 'numeric', month: 'long', day: 'numeric' });
+const c = byName(post.data.category);
+const cat = c ? (lang === 'en' ? c.en : c.el) : post.data.category;
 ---
 <Base title={post.data.title} description={post.data.summary}>
-  <article>
+  <article lang={lang}>
     <h1>{post.data.title}</h1>
-    <p class="muted small">{post.data.category} · {date}</p>
+    <p class="muted small">{cat} · {date}</p>
     <Content />
   </article>
 </Base>

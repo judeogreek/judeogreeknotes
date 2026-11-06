@@ -17,7 +17,7 @@ const full = title ? `${title} · Judeo-Greek Notes` : 'Judeo-Greek Notes';
 <body>
   <header class="wrap">
     <a class="brand" href="/">Judeo-Greek Notes</a>
-    <nav>{categories.map((c) => <a href={`/kategoria/${c.slug}/`}>{c.name}</a>)}</nav>
+    <nav>{categories.map((c) => <a href={`/kategoria/${c.slug}/`}>{c.el} <span class="en">{c.en}</span></a>)}<a href="/sxetika/">Σχετικά <span class="en">About</span></a></nav>
   </header>
   <main class="wrap"><slot /></main>
   <footer class="wrap muted small">© {new Date().getFullYear()} Judeo-Greek Notes</footer>
@@ -47,4 +47,6 @@ const full = title ? `${title} · Judeo-Greek Notes` : 'Judeo-Greek Notes';
   article { max-width:40rem; } article p { margin:0 0 1.2rem; }
   footer { margin-top:4rem; padding-top:1.25rem; padding-bottom:2.5rem; border-top:1px solid var(--rule); }
   @media (max-width:36rem) { .list li { grid-template-columns:1fr; gap:.2rem; } .brand { font-size:2.1rem; } h1 { font-size:2rem; } }
+.en { color:var(--muted); font-size:.85em; }
+  .tag { margin-left:.6rem; padding:0 .35rem; border:1px solid var(--rule); border-radius:3px; font-size:.75rem; letter-spacing:.04em; }
 </style>

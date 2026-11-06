@@ -2,14 +2,14 @@
 import Base from '../../layouts/Base.astro';
 import ArticleList from '../../components/ArticleList.astro';
 import { getCollection } from 'astro:content';
-import { categories } from '../../categories';
+import { categories, byName } from '../../categories';
 export function getStaticPaths() {
   return categories.map((c) => ({ params: { slug: c.slug }, props: { cat: c } }));
 }
 const { cat } = Astro.props;
-const posts = (await getCollection('articles', ({ data }) => data.category === cat.name)).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const posts = (await getCollection('articles', ({ data }) => byName(data.category)?.slug === cat.slug)).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 ---
-<Base title={cat.name}>
-  <h1>{cat.name}</h1>
+<Base title={`${cat.el} / ${cat.en}`}>
+  <h1>{cat.el} <span class="en">{cat.en}</span></h1>
   <ArticleList posts={posts} />
 </Base>

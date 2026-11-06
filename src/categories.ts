@@ -1,7 +1,8 @@
-// Οι κατηγορίες του site. Το "name" είναι αυτό που γράφεις στα άρθρα.
+// Οι κατηγορίες του site (ελληνικό και αγγλικό όνομα).
 export const categories = [
-  { name: 'Ιστορία', slug: 'istoria' },
-  { name: 'Άρθρα γνώμης', slug: 'arthra-gnomis' },
-  { name: 'Βιβλιοκριτικές', slug: 'vivliokritikes' },
-  { name: 'Συνεντεύξεις', slug: 'synenteuxeis' },
+  { el: 'Ιστορία', en: 'History', slug: 'istoria' },
+  { el: 'Άρθρα γνώμης', en: 'Opinion', slug: 'arthra-gnomis' },
+  { el: 'Βιβλιοκριτικές', en: 'Book reviews', slug: 'vivliokritikes' },
+  { el: 'Συνεντεύξεις', en: 'Interviews', slug: 'synenteuxeis' },
 ];
+export const byName = (name) => categories.find((c) => c.el === name || c.en === name);
