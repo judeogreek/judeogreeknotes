@@ -2,21 +2,38 @@
 import Base from '../../layouts/Base.astro';
 import { getCollection } from 'astro:content';
 import { byName } from '../../categories';
+import { getAuthor } from '../../authors';
 export async function getStaticPaths() {
   const posts = await getCollection('articles');
   return posts.map((post) => ({ params: { slug: post.slug }, props: { post } }));
 }
 const { post } = Astro.props;
 const { Content } = await post.render();
-const lang = post.data.lang;
-const date = post.data.date.toLocaleDateString(lang === 'en' ? 'en-GB' : 'el-GR', { year: 'numeric', month: 'long', day: 'numeric' });
-const c = byName(post.data.category);
-const cat = c ? (lang === 'en' ? c.en : c.el) : post.data.category;
+const d = post.data;
+const date = d.date.toLocaleDateString(d.lang === 'en' ? 'en-GB' : 'el-GR', { year: 'numeric', month: 'long', day: 'numeric' });
+const c = byName(d.category);
+const cat = c ? (d.lang === 'en' ? c.en : c.el) : d.category;
+const author = await getAuthor(d.author);
+const hasBio = !!(author && author.entry && author.entry.body.trim().length > 0);
+const Bio = hasBio ? (await author.entry.render()).Content : null;
 ---
-<Base title={post.data.title} description={post.data.summary}>
-  <article lang={lang}>
-    <h1>{post.data.title}</h1>
-    <p class="muted small">{cat} · {date}</p>
+<Base title={d.title} description={d.summary} image={d.image}>
+  <article lang={d.lang}>
+    <h1>{d.title}</h1>
+    <p class="muted small">{cat} · {date}{author && <> · {author.name}</>}</p>
+    {d.image && (
+      <figure class="hero">
+        <img src={d.image} alt={d.imageAlt ?? ''} />
+        {d.imageCredit && <figcaption class="muted small">{d.imageLink ? <a href={d.imageLink}>{d.imageCredit}</a> : d.imageCredit}</figcaption>}
+      </figure>
+    )}
     <Content />
   </article>
+  {hasBio && (
+    <aside class="bio">
+      <p class="small muted">Συγγραφέας <span class="en">Author</span></p>
+      <p class="bio-name">{author.name}</p>
+      <Bio />
+    </aside>
+  )}
 </Base>

@@ -1,10 +1,14 @@
 ---
 import Base from '../layouts/Base.astro';
 import ArticleList from '../components/ArticleList.astro';
+import Featured from '../components/Featured.astro';
 import { getCollection } from 'astro:content';
 const posts = (await getCollection('articles')).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const [first, ...rest] = posts;
 ---
 <Base>
-  <p class="muted">Σύντομα κείμενα και βιβλιοκριτικές για την ιστορία των Εβραίων της Ελλάδας.</p>
-  <ArticleList posts={posts} />
+  {posts.length === 0 && <p class="muted">Δεν υπάρχουν ακόμα άρθρα / No articles yet.</p>}
+  {first && <Featured post={first} />}
+  {rest.length > 0 && <h2 class="more">Παλαιότερα <span class="en">Earlier</span></h2>}
+  <ArticleList posts={rest} />
 </Base>

@@ -1,7 +1,7 @@
 // Οι κατηγορίες του site (ελληνικό και αγγλικό όνομα).
 export const categories = [
   { el: 'Ιστορία', en: 'History', slug: 'istoria' },
-  { el: 'Άρθρα γνώμης', en: 'Opinion', slug: 'arthra-gnomis' },
+  { el: 'Άρθρα γνώμης', en: 'Opinion pieces', slug: 'arthra-gnomis' },
   { el: 'Βιβλιοκριτικές', en: 'Book reviews', slug: 'vivliokritikes' },
   { el: 'Συνεντεύξεις', en: 'Interviews', slug: 'synenteuxeis' },
 ];

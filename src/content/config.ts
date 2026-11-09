@@ -10,6 +10,15 @@ export const collections = {
       category: z.string().refine((v) => names.includes(v), { message: 'Άγνωστη κατηγορία' }),
       lang: z.enum(['el', 'en']).default('el'),
       summary: z.string().optional(),
+      author: z.string().optional(),
+      image: z.string().optional(),
+      imageAlt: z.string().optional(),
+      imageCredit: z.string().optional(),
+      imageLink: z.string().url().optional(),
     }),
+  }),
+  authors: defineCollection({
+    type: 'content',
+    schema: z.object({ name: z.string() }),
   }),
 };

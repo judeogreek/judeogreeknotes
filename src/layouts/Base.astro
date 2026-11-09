@@ -1,7 +1,8 @@
 ---
 import { categories } from '../categories';
-const { title, description = 'Σύντομα κείμενα και βιβλιοκριτικές για την ιστορία των Εβραίων της Ελλάδας.' } = Astro.props;
+const { title, description = 'Σύντομα κείμενα και βιβλιοκριτικές για την ιστορία των Εβραίων της Ελλάδας.', image } = Astro.props;
 const full = title ? `${title} · Judeo-Greek Notes` : 'Judeo-Greek Notes';
+const og = image ? new URL(image, Astro.site).href : null;
 ---
 <!doctype html>
 <html lang="el">
@@ -10,43 +11,68 @@ const full = title ? `${title} · Judeo-Greek Notes` : 'Judeo-Greek Notes';
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>{full}</title>
   <meta name="description" content={description} />
+  <meta property="og:title" content={full} />
+  <meta property="og:description" content={description} />
+  <meta property="og:type" content="website" />
+  {og && <meta property="og:image" content={og} />}
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
 </head>
 <body>
   <header class="wrap">
-    <a class="brand" href="/">Judeo-Greek Notes</a>
-    <nav>{categories.map((c) => <a href={`/kategoria/${c.slug}/`}>{c.el} <span class="en">{c.en}</span></a>)}<a href="/sxetika/">Σχετικά <span class="en">About</span></a></nav>
+    <div class="mast">
+      <a class="brand" href="/">Judeo-Greek Notes</a>
+      <p class="tag-el">Σύντομα κείμενα και βιβλιοκριτικές για την ιστορία των Εβραίων της Ελλάδας</p>
+      <p class="tag-en">Short texts and book reviews on the history of Greek Jews</p>
+      <nav>
+        {categories.map((c) => <a href={`/kategoria/${c.slug}/`}>{c.el}<span class="en">{c.en}</span></a>)}
+        <a href="/sxetika/">Σχετικά<span class="en">About</span></a>
+        <a href="/contact/">Επικοινωνία<span class="en">Contact</span></a>
+      </nav>
+    </div>
   </header>
   <main class="wrap"><slot /></main>
   <footer class="wrap muted small">© {new Date().getFullYear()} Judeo-Greek Notes</footer>
 </body>
 </html>
 <style is:global>
-  :root { --paper:#F6F6F3; --ink:#1C2530; --muted:#5E6873; --rule:#D3D7D6; --blue:#1D4E7A; }
+  :root { --paper:#F5F6F8; --ink:#17212B; --muted:#566270; --rule:#CDD5DD; --navy:#16324F; --blue:#1D4E7A; --tint:#E6ECF2; }
   * { box-sizing: border-box; }
   body { margin:0; background:var(--paper); color:var(--ink); font-family:'Source Serif 4',Georgia,serif; font-size:1.125rem; line-height:1.7; }
   .wrap { max-width:44rem; margin:0 auto; padding:0 1.25rem; }
-  a { color:var(--blue); }
-  a:focus-visible { outline:2px solid var(--blue); outline-offset:3px; }
+  a { color:var(--blue); } a:focus-visible { outline:2px solid var(--blue); outline-offset:3px; }
   .muted { color:var(--muted); } .small { font-size:.9rem; line-height:1.5; }
-  header { padding-top:2.75rem; padding-bottom:1.25rem; border-bottom:1px solid var(--rule); margin-bottom:2rem; }
-  .brand { display:block; font-family:'EB Garamond',Georgia,serif; font-weight:500; font-size:2.6rem; line-height:1.1; color:var(--ink); text-decoration:none; margin-bottom:.9rem; }
-  nav { display:flex; flex-wrap:wrap; gap:.4rem 1.5rem; font-size:1rem; }
-  nav a { color:var(--ink); text-decoration:none; border-bottom:1px solid transparent; }
-  nav a:hover { border-bottom-color:var(--blue); }
-  h1,h2,h3 { font-family:'EB Garamond',Georgia,serif; font-weight:500; line-height:1.2; }
+  .en { color:var(--muted); font-size:.85em; }
+  .mast { margin-top:1.1rem; padding:1.6rem 0 1.1rem; border-top:1px solid var(--navy); border-bottom:3px double var(--navy); text-align:center; }
+  .brand { display:inline-block; font-family:'EB Garamond',Georgia,serif; font-weight:500; font-size:clamp(1.15rem,5vw,1.9rem); line-height:1.2; letter-spacing:.28em; padding-left:.28em; text-transform:uppercase; color:var(--navy); text-decoration:none; }
+  .tag-el { margin:.9rem 0 0; font-style:italic; font-size:1rem; line-height:1.4; color:var(--muted); }
+  .tag-en { margin:.15rem 0 1.1rem; font-size:.85rem; line-height:1.4; color:var(--muted); }
+  nav { display:flex; flex-wrap:wrap; justify-content:center; gap:.6rem 1.6rem; padding-top:.9rem; border-top:1px solid var(--rule); font-size:.98rem; }
+  nav a { display:flex; flex-direction:column; align-items:center; line-height:1.3; color:var(--ink); text-decoration:none; border-bottom:1px solid transparent; }
+  nav a:hover { border-bottom-color:var(--blue); } nav .en { font-size:.78rem; }
+  main { padding-top:3rem; }
+  h1,h2,h3 { font-family:'EB Garamond',Georgia,serif; font-weight:500; line-height:1.2; color:var(--navy); }
   h1 { font-size:2.5rem; margin:0 0 .5rem; } h2 { font-size:1.7rem; margin:2.2rem 0 .5rem; }
+  h2.more { font-size:1.3rem; margin:2.5rem 0 .2rem; }
+  .featured { display:grid; grid-template-columns:1fr; gap:1.25rem; background:var(--tint); padding:1.6rem; border-radius:2px; }
+  .featured:has(.fimg) { grid-template-columns:8rem 1fr; }
+  .fimg { width:100%; height:auto; display:block; }
+  .featured p { margin:.4rem 0 0; } .featured .kicker { margin:0 0 .3rem; font-size:.85rem; color:var(--muted); }
+  .ftitle { display:block; font-family:'EB Garamond',Georgia,serif; font-size:2rem; line-height:1.2; color:var(--navy); text-decoration:none; }
+  .ftitle:hover { text-decoration:underline; }
   .list { list-style:none; margin:0; padding:0; }
   .list li { display:grid; grid-template-columns:9.5rem 1fr; gap:1rem; padding:1.1rem 0; border-bottom:1px solid var(--rule); }
   .list time { font-size:.95rem; padding-top:.35rem; }
   .title { font-family:'EB Garamond',Georgia,serif; font-size:1.55rem; line-height:1.25; color:var(--ink); text-decoration:none; }
-  .title:hover { color:var(--blue); }
-  .summary { margin:.4rem 0 0; }
-  article { max-width:40rem; } article p { margin:0 0 1.2rem; }
-  footer { margin-top:4rem; padding-top:1.25rem; padding-bottom:2.5rem; border-top:1px solid var(--rule); }
-  @media (max-width:36rem) { .list li { grid-template-columns:1fr; gap:.2rem; } .brand { font-size:2.1rem; } h1 { font-size:2rem; } }
-.en { color:var(--muted); font-size:.85em; }
+  .title:hover { color:var(--blue); } .summary { margin:.4rem 0 0; }
+  .thumb-s { float:right; width:4.5rem; height:auto; margin:.2rem 0 .5rem 1rem; }
   .tag { margin-left:.6rem; padding:0 .35rem; border:1px solid var(--rule); border-radius:3px; font-size:.75rem; letter-spacing:.04em; }
+  article { max-width:40rem; } article p { margin:0 0 1.2rem; }
+  .hero { margin:1.2rem 0 1.6rem; } .hero img { display:block; max-width:100%; max-height:28rem; width:auto; height:auto; } .hero figcaption { margin-top:.4rem; }
+  .bio { max-width:40rem; margin-top:3rem; padding:1.3rem 1.5rem; background:var(--tint); border-radius:2px; }
+  .bio p { margin:0 0 .6rem; } .bio .bio-name { font-family:'EB Garamond',Georgia,serif; font-size:1.4rem; line-height:1.2; color:var(--navy); }
+  footer { margin-top:4rem; padding-top:1.25rem; padding-bottom:2.5rem; border-top:1px solid var(--rule); }
+  @media (max-width:36rem) { .list li { grid-template-columns:1fr; gap:.2rem; } h1 { font-size:2rem; } .ftitle { font-size:1.6rem; } .featured { padding:1.2rem; } .featured:has(.fimg) { grid-template-columns:1fr; } .fimg { max-width:9rem; } }
 </style>

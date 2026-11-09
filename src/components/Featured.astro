@@ -1,0 +1,19 @@
+---
+import { byName } from '../categories';
+import { getAuthor } from '../authors';
+const { post } = Astro.props;
+const d = post.data;
+const date = d.date.toLocaleDateString(d.lang === 'en' ? 'en-GB' : 'el-GR', { year: 'numeric', month: 'long', day: 'numeric' });
+const c = byName(d.category);
+const cat = c ? (d.lang === 'en' ? c.en : c.el) : d.category;
+const author = await getAuthor(d.author);
+---
+<article class="featured">
+  {d.image && <img class="fimg" src={d.image} alt={d.imageAlt ?? ''} />}
+  <div>
+    <p class="kicker">Πιο πρόσφατο <span class="en">Latest</span></p>
+    <a class="ftitle" lang={d.lang} href={`/arthra/${post.slug}/`}>{d.title}</a>
+    <p class="muted small">{cat} · {date}{author && <> · {author.name}</>}</p>
+    {d.summary && <p lang={d.lang}>{d.summary}</p>}
+  </div>
+</article>
