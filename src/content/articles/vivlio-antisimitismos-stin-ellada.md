@@ -5,7 +5,7 @@ category: "Νέες εκδόσεις"
 summary: "νεότερες και σύγχρονες αναγνώσεις από τον 19ο αιώνα μέχρι σήμερα αποτελεί μια διεπιστημονική και πολυφωνική παρέμβαση σε ένα από τα πλέον επίκαιρα και ιστορικά επιβαρυμένα πεδία της δημόσιας συζήτησης."
 author: "Άννα Μαρία Δρουμπούκη"
 image: "/images/vivlio-antisimitismos-stin-ellada.jpg"
-imageAlt: "Εξώφυλλο του βιβλίου ..."
+imageAlt: "Εξώφυλλο του βιβλίου Αντισημιτισμός στην Ελλάδα"
 imageCredit: "Εκδόσεις βιβλιοπωλείον της ΕΣΤΙΑΣ"
 imageLink: "https://hestia.gr/biblia/istoria-and-politiki-el/antisimitismos-stin-ellada/"
 ---
