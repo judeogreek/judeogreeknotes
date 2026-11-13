@@ -16,14 +16,14 @@ const sources = [
   },
 ];
 ---
-<Base title="Πηγές / Sources">
+<Base title="Πηγές">
   <article>
-    <h1>Πηγές <span class="en">Sources</span></h1>
+    <h1>Πηγές</h1>
     <p class="muted">Σύνδεσμοι σε ελεύθερα προσβάσιμες πηγές, στους ιστότοπους των φορέων που τις φιλοξενούν.</p>
     <ul class="src">
       {sources.map((s) => (
         <li>
-          <a href={s.url} rel="noopener">{s.name}</a> <span class="en">{s.nameEn}</span>
+          <a href={s.url} rel="noopener">{s.name}</a>
           {s.desc && <p>{s.desc}</p>}
           {s.descEn && <p class="muted small" lang="en">{s.descEn}</p>}
         </li>

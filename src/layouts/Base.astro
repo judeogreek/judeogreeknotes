@@ -4,6 +4,8 @@ import { categories } from '../categories';
 const { title, description = 'Σύντομα κείμενα και βιβλιοκριτικές για την ιστορία των Εβραίων της Ελλάδας.', image } = Astro.props;
 const full = title ? `${title} · Judeo-Greek Notes` : 'Judeo-Greek Notes';
 const og = image ? new URL(image, Astro.site).href : null;
+const here = Astro.url.pathname;
+const cur = (h) => (here.startsWith(h) ? 'on' : undefined);
 const all = await getCollection('articles');
 const langs = ['el', 'en', 'fr'].filter((l) => all.some((p) => p.data.lang === l));
 ---
@@ -24,23 +26,33 @@ const langs = ['el', 'en', 'fr'].filter((l) => all.some((p) => p.data.lang === l
   <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
 </head>
 <body>
-  <header class="wrap">
+  <header class="wide">
     <div class="mast">
       {langs.length > 1 && <div class="langs">{langs.map((l) => <a href={`/glossa/${l}/`}>{l.toUpperCase()}</a>)}</div>}
       <a class="brand" href="/">Judeo-Greek Notes</a>
-      <details class="menu">
-        <summary>☰ Μενού <span class="en">Menu</span></summary>
-        <nav>
-          {categories.map((c) => <a href={`/kategoria/${c.slug}/`}>{c.el}<span class="en">{c.en}</span></a>)}
-          <a href="/piges/">Πηγές<span class="en">Sources</span></a>
-          <a href="/sxetika/">Σχετικά<span class="en">About</span></a>
-          <a href="/contact/">Επικοινωνία<span class="en">Contact</span></a>
-        </nav>
-      </details>
     </div>
   </header>
-  <main class="wrap"><slot /></main>
-  <footer class="wrap muted small">© {new Date().getFullYear()} Judeo-Greek Notes</footer>
+  <div class="wide layout">
+    <nav class="side" aria-label="Κύριο μενού">
+      <p class="lbl">Κατηγορίες</p>
+      {categories.map((c) => <a class={cur(`/kategoria/${c.slug}/`)} href={`/kategoria/${c.slug}/`}>{c.el}</a>)}
+      <hr />
+      <a class={cur('/piges/')} href="/piges/">Πηγές</a>
+      <a class={cur('/sxetika/')} href="/sxetika/">Σχετικά</a>
+      <a class={cur('/contact/')} href="/contact/">Επικοινωνία</a>
+    </nav>
+    <details class="mobile-menu">
+      <summary>☰ Μενού</summary>
+      <nav class="mnav" aria-label="Μενού">
+        {categories.map((c) => <a class={cur(`/kategoria/${c.slug}/`)} href={`/kategoria/${c.slug}/`}>{c.el}</a>)}
+        <a class={cur('/piges/')} href="/piges/">Πηγές</a>
+        <a class={cur('/sxetika/')} href="/sxetika/">Σχετικά</a>
+        <a class={cur('/contact/')} href="/contact/">Επικοινωνία</a>
+      </nav>
+    </details>
+    <main><slot /></main>
+  </div>
+  <footer class="wide muted small">© {new Date().getFullYear()} Judeo-Greek Notes</footer>
 </body>
 </html>
 <style is:global>
@@ -55,15 +67,22 @@ const langs = ['el', 'en', 'fr'].filter((l) => all.some((p) => p.data.lang === l
   .langs { text-align:right; font-size:.85rem; letter-spacing:.06em; margin-bottom:.8rem; }
   .langs a { color:var(--muted); text-decoration:none; margin-left:.9rem; } .langs a:hover { color:var(--blue); text-decoration:underline; }
   .brand { display:inline-block; font-family:'EB Garamond',Georgia,serif; font-weight:700; font-size:clamp(1.05rem,5vw,2rem); line-height:1.2; letter-spacing:.28em; padding-left:.28em; text-transform:uppercase; color:var(--navy); text-decoration:none; }
-  .menu { margin-top:1.3rem; }
-  .menu summary { display:inline-block; cursor:pointer; list-style:none; padding:.3rem 1rem; border:1px solid var(--navy); border-radius:2px; color:var(--navy); font-size:.95rem; line-height:1.5; }
-  .menu summary::-webkit-details-marker { display:none; }
-  .menu summary:focus-visible { outline:2px solid var(--blue); outline-offset:3px; }
-  .menu[open] summary { background:var(--navy); color:var(--paper); } .menu[open] summary .en { color:var(--paper); }
-  .menu nav { display:grid; grid-template-columns:repeat(auto-fit,minmax(10rem,1fr)); gap:.8rem 1rem; margin-top:1.1rem; padding-top:1rem; border-top:1px solid var(--rule); font-size:1rem; }
-  .menu nav a { display:flex; flex-direction:column; align-items:center; line-height:1.3; color:var(--ink); text-decoration:none; }
-  .menu nav a:hover { color:var(--blue); text-decoration:underline; } .menu nav .en { font-size:.78rem; }
-  main { padding-top:4.5rem; }
+  .wide { max-width:60rem; margin:0 auto; padding:0 1.25rem; }
+  .layout { display:grid; grid-template-columns:11.5rem minmax(0,1fr); gap:0 3rem; padding-top:4rem; }
+  .layout main { max-width:44rem; }
+  .side { position:sticky; top:1.5rem; align-self:start; display:flex; flex-direction:column; gap:.45rem; font-size:1rem; line-height:1.4; }
+  .side .lbl { margin:0 0 .3rem; font-size:.8rem; letter-spacing:.06em; color:var(--muted); }
+  .side hr { width:100%; margin:.8rem 0; border:0; border-top:1px solid var(--rule); }
+  .side a, .mnav a { color:var(--ink); text-decoration:none; padding:.15rem 0; }
+  .side a:hover, .mnav a:hover { color:var(--blue); text-decoration:underline; }
+  .side a.on, .mnav a.on { color:var(--navy); font-weight:600; }
+  .mobile-menu { display:none; margin-bottom:2rem; }
+  .mobile-menu summary { display:inline-block; cursor:pointer; list-style:none; padding:.3rem 1rem; border:1px solid var(--navy); border-radius:2px; color:var(--navy); font-size:.95rem; line-height:1.5; }
+  .mobile-menu summary::-webkit-details-marker { display:none; }
+  .mobile-menu summary:focus-visible { outline:2px solid var(--blue); outline-offset:3px; }
+  .mobile-menu[open] summary { background:var(--navy); color:var(--paper); }
+  .mnav { display:flex; flex-direction:column; gap:.5rem; margin-top:1rem; padding:1rem 0; border-top:1px solid var(--rule); border-bottom:1px solid var(--rule); }
+  @media (max-width:52rem) { .layout { grid-template-columns:minmax(0,1fr); padding-top:2.5rem; } .side { display:none; } .mobile-menu { display:block; } }
   h1,h2,h3 { font-family:'EB Garamond',Georgia,serif; font-weight:500; line-height:1.2; color:var(--navy); }
   h1 { font-size:2.5rem; margin:0 0 .5rem; } h2 { font-size:1.7rem; margin:2.2rem 0 .5rem; }
   h2.more { font-size:1.3rem; margin:2.5rem 0 .2rem; }

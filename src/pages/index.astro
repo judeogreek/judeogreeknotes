@@ -7,8 +7,8 @@ const posts = (await getCollection('articles')).sort((a, b) => b.data.date.value
 const [first, ...rest] = posts;
 ---
 <Base>
-  {posts.length === 0 && <p class="muted">Δεν υπάρχουν ακόμα άρθρα / No articles yet.</p>}
+  {posts.length === 0 && <p class="muted">Δεν υπάρχουν ακόμα άρθρα.</p>}
   {first && <Featured post={first} />}
-  {rest.length > 0 && <h2 class="more">Παλαιότερα <span class="en">Earlier</span></h2>}
+  {rest.length > 0 && <h2 class="more">Παλαιότερα</h2>}
   <ArticleList posts={rest} />
 </Base>

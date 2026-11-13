@@ -9,7 +9,7 @@ export function getStaticPaths() {
 const { cat } = Astro.props;
 const posts = (await getCollection('articles', ({ data }) => byName(data.category)?.slug === cat.slug)).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 ---
-<Base title={`${cat.el} / ${cat.en}`}>
-  <h1>{cat.el} <span class="en">{cat.en}</span></h1>
+<Base title={cat.el}>
+  <h1>{cat.el}</h1>
   <ArticleList posts={posts} />
 </Base>
