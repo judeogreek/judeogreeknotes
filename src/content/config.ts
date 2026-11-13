@@ -8,7 +8,7 @@ export const collections = {
       title: z.string(),
       date: z.coerce.date(),
       category: z.string().refine((v) => names.includes(v), { message: 'Άγνωστη κατηγορία' }),
-      lang: z.enum(['el', 'en']).default('el'),
+      lang: z.enum(['el', 'en', 'fr']).default('el'),
       summary: z.string().optional(),
       author: z.string().optional(),
       image: z.string().optional(),

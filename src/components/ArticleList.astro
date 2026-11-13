@@ -1,20 +1,20 @@
 ---
 import { byName } from '../categories';
 import { getAuthor } from '../authors';
+import { fmtDate, catLabel } from '../lang';
 const { posts } = Astro.props;
 const authors = await Promise.all(posts.map((p) => getAuthor(p.data.author)));
-const fmt = (d, lang) => d.toLocaleDateString(lang === 'en' ? 'en-GB' : 'el-GR', { year: 'numeric', month: 'long', day: 'numeric' });
-const label = (p) => { const c = byName(p.data.category); return c ? (p.data.lang === 'en' ? c.en : c.el) : p.data.category; };
+const label = (p) => { const c = byName(p.data.category); return c ? catLabel(c, p.data.lang) : p.data.category; };
 ---
 {posts.length > 0 && (
 <ul class="list">
   {posts.map((p, i) => (
     <li>
-      <time class="muted" datetime={p.data.date.toISOString()}>{fmt(p.data.date, p.data.lang)}</time>
+      <time class="muted" datetime={p.data.date.toISOString()}>{fmtDate(p.data.date, p.data.lang)}</time>
       <div>
         {p.data.image && <img class="thumb-s" src={p.data.image} alt="" loading="lazy" />}
         <a class="title" lang={p.data.lang} href={`/arthra/${p.slug}/`}>{p.data.title}</a>
-        <div class="muted small">{label(p)}{authors[i] && <> · {authors[i].name}</>}{p.data.lang === 'en' && <span class="tag">EN</span>}</div>
+        <div class="muted small">{label(p)}{authors[i] && <> · {authors[i].name}</>}{p.data.lang !== 'el' && <span class="tag">{p.data.lang.toUpperCase()}</span>}</div>
         {p.data.summary && <p class="summary" lang={p.data.lang}>{p.data.summary}</p>}
       </div>
     </li>

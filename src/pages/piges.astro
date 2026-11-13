@@ -1,0 +1,33 @@
+---
+import Base from '../layouts/Base.astro';
+// Για να προσθέσεις πηγή, αντίγραψε ένα από τα παρακάτω μπλοκ { ... }, βάλε κόμμα στο τέλος και άλλαξε τα στοιχεία.
+const sources = [
+  {
+    name: 'Χρονικά', nameEn: 'Chronika',
+    url: 'https://www.kis.gr/ekdosis/xronika',
+    desc: 'Το περιοδικό του Κεντρικού Ισραηλιτικού Συμβουλίου Ελλάδος. Τα τεύχη διατίθενται σε PDF (1960–1962 και από το 1977 μέχρι σήμερα).',
+    descEn: 'The journal of the Central Board of Jewish Communities in Greece. Issues are available as PDF files (1960–1962 and from 1977 to date).',
+  },
+  {
+    name: 'Ιώσηπος: Ψηφιακό Αποθετήριο', nameEn: 'Iosipos: Digital Repository',
+    url: 'https://repository.jct.gr/',
+    desc: 'Το ψηφιακό αποθετήριο ιστορικής μνήμης και πολιτισμού του έργου «Ιώσηπος» της Ισραηλιτικής Κοινότητας Θεσσαλονίκης, αφιερωμένο στους Έλληνες Εβραίους. Περιλαμβάνει πάνω από 200.000 τεκμήρια: αρχεία, έντυπες εκδόσεις, αντικείμενα και ειδικές συλλογές.',
+    descEn: 'The digital repository of historical memory and culture of the “Iosipos” project of the Jewish Community of Thessaloniki, dedicated to Greek Jews. It holds over 200,000 records: archives, printed editions, objects and special collections.',
+  },
+];
+---
+<Base title="Πηγές / Sources">
+  <article>
+    <h1>Πηγές <span class="en">Sources</span></h1>
+    <p class="muted">Σύνδεσμοι σε ελεύθερα προσβάσιμες πηγές, στους ιστότοπους των φορέων που τις φιλοξενούν.</p>
+    <ul class="src">
+      {sources.map((s) => (
+        <li>
+          <a href={s.url} rel="noopener">{s.name}</a> <span class="en">{s.nameEn}</span>
+          {s.desc && <p>{s.desc}</p>}
+          {s.descEn && <p class="muted small" lang="en">{s.descEn}</p>}
+        </li>
+      ))}
+    </ul>
+  </article>
+</Base>

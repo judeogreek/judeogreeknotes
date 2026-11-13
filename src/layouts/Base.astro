@@ -1,8 +1,11 @@
 ---
+import { getCollection } from 'astro:content';
 import { categories } from '../categories';
 const { title, description = 'Σύντομα κείμενα και βιβλιοκριτικές για την ιστορία των Εβραίων της Ελλάδας.', image } = Astro.props;
 const full = title ? `${title} · Judeo-Greek Notes` : 'Judeo-Greek Notes';
 const og = image ? new URL(image, Astro.site).href : null;
+const all = await getCollection('articles');
+const langs = ['el', 'en', 'fr'].filter((l) => all.some((p) => p.data.lang === l));
 ---
 <!doctype html>
 <html lang="el">
@@ -23,12 +26,17 @@ const og = image ? new URL(image, Astro.site).href : null;
 <body>
   <header class="wrap">
     <div class="mast">
+      {langs.length > 1 && <div class="langs">{langs.map((l) => <a href={`/glossa/${l}/`}>{l.toUpperCase()}</a>)}</div>}
       <a class="brand" href="/">Judeo-Greek Notes</a>
-      <nav>
-        {categories.map((c) => <a href={`/kategoria/${c.slug}/`}>{c.el}<span class="en">{c.en}</span></a>)}
-        <a href="/sxetika/">Σχετικά<span class="en">About</span></a>
-        <a href="/contact/">Επικοινωνία<span class="en">Contact</span></a>
-      </nav>
+      <details class="menu">
+        <summary>☰ Μενού <span class="en">Menu</span></summary>
+        <nav>
+          {categories.map((c) => <a href={`/kategoria/${c.slug}/`}>{c.el}<span class="en">{c.en}</span></a>)}
+          <a href="/piges/">Πηγές<span class="en">Sources</span></a>
+          <a href="/sxetika/">Σχετικά<span class="en">About</span></a>
+          <a href="/contact/">Επικοινωνία<span class="en">Contact</span></a>
+        </nav>
+      </details>
     </div>
   </header>
   <main class="wrap"><slot /></main>
@@ -43,14 +51,19 @@ const og = image ? new URL(image, Astro.site).href : null;
   a { color:var(--blue); } a:focus-visible { outline:2px solid var(--blue); outline-offset:3px; }
   .muted { color:var(--muted); } .small { font-size:.9rem; line-height:1.5; }
   .en { color:var(--muted); font-size:.85em; }
-  .mast { margin-top:1.1rem; padding:1.6rem 0 1.1rem; border-top:1px solid var(--navy); border-bottom:3px double var(--navy); text-align:center; }
+  .mast { margin-top:1.1rem; padding:1.2rem 0 1.1rem; border-top:1px solid var(--navy); border-bottom:3px double var(--navy); text-align:center; }
+  .langs { text-align:right; font-size:.85rem; letter-spacing:.06em; margin-bottom:.8rem; }
+  .langs a { color:var(--muted); text-decoration:none; margin-left:.9rem; } .langs a:hover { color:var(--blue); text-decoration:underline; }
   .brand { display:inline-block; font-family:'EB Garamond',Georgia,serif; font-weight:700; font-size:clamp(1.05rem,5vw,2rem); line-height:1.2; letter-spacing:.28em; padding-left:.28em; text-transform:uppercase; color:var(--navy); text-decoration:none; }
-  .tag-el { margin:.9rem 0 0; font-style:italic; font-size:1rem; line-height:1.4; color:var(--muted); }
-  .tag-en { margin:.15rem 0 1.1rem; font-size:.85rem; line-height:1.4; color:var(--muted); }
-  nav { margin-top:1.2rem; display:flex; flex-wrap:wrap; justify-content:center; gap:.6rem 1.6rem; padding-top:.9rem; border-top:1px solid var(--rule); font-size:.98rem; }
-  nav a { display:flex; flex-direction:column; align-items:center; line-height:1.3; color:var(--ink); text-decoration:none; border-bottom:1px solid transparent; }
-  nav a:hover { border-bottom-color:var(--blue); } nav .en { font-size:.78rem; }
-  main { padding-top:6rem; }
+  .menu { margin-top:1.3rem; }
+  .menu summary { display:inline-block; cursor:pointer; list-style:none; padding:.3rem 1rem; border:1px solid var(--navy); border-radius:2px; color:var(--navy); font-size:.95rem; line-height:1.5; }
+  .menu summary::-webkit-details-marker { display:none; }
+  .menu summary:focus-visible { outline:2px solid var(--blue); outline-offset:3px; }
+  .menu[open] summary { background:var(--navy); color:var(--paper); } .menu[open] summary .en { color:var(--paper); }
+  .menu nav { display:grid; grid-template-columns:repeat(auto-fit,minmax(10rem,1fr)); gap:.8rem 1rem; margin-top:1.1rem; padding-top:1rem; border-top:1px solid var(--rule); font-size:1rem; }
+  .menu nav a { display:flex; flex-direction:column; align-items:center; line-height:1.3; color:var(--ink); text-decoration:none; }
+  .menu nav a:hover { color:var(--blue); text-decoration:underline; } .menu nav .en { font-size:.78rem; }
+  main { padding-top:4.5rem; }
   h1,h2,h3 { font-family:'EB Garamond',Georgia,serif; font-weight:500; line-height:1.2; color:var(--navy); }
   h1 { font-size:2.5rem; margin:0 0 .5rem; } h2 { font-size:1.7rem; margin:2.2rem 0 .5rem; }
   h2.more { font-size:1.3rem; margin:2.5rem 0 .2rem; }
@@ -68,6 +81,8 @@ const og = image ? new URL(image, Astro.site).href : null;
   .thumb-s { float:right; width:4.5rem; height:auto; margin:.2rem 0 .5rem 1rem; }
   .tag { margin-left:.6rem; padding:0 .35rem; border:1px solid var(--rule); border-radius:3px; font-size:.75rem; letter-spacing:.04em; }
   article { max-width:40rem; } article p { margin:0 0 1.2rem; }
+  .src { list-style:none; margin:1.5rem 0 0; padding:0; } .src li { padding:1rem 0; border-bottom:1px solid var(--rule); }
+  .src li > a { font-family:'EB Garamond',Georgia,serif; font-size:1.5rem; } .src p { margin:.3rem 0 0; }
   .hero { margin:1.2rem 0 1.6rem; } .hero img { display:block; max-width:100%; max-height:28rem; width:auto; height:auto; } .hero figcaption { margin-top:.4rem; }
   .bio { max-width:40rem; margin-top:3rem; padding:1.3rem 1.5rem; background:var(--tint); border-radius:2px; }
   .bio p { margin:0 0 .6rem; } .bio .bio-name { font-family:'EB Garamond',Georgia,serif; font-size:1.4rem; line-height:1.2; color:var(--navy); }

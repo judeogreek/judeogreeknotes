@@ -4,5 +4,6 @@ export const categories = [
   { el: 'Άρθρα γνώμης', en: 'Opinion pieces', slug: 'arthra-gnomis' },
   { el: 'Βιβλιοκριτικές', en: 'Book reviews', slug: 'vivliokritikes' },
   { el: 'Συνεντεύξεις', en: 'Interviews', slug: 'synenteuxeis' },
+  { el: 'Νέες εκδόσεις', en: 'New publications', slug: 'nees-ekdoseis' },
 ];
 export const byName = (name) => categories.find((c) => c.el === name || c.en === name);

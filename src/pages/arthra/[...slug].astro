@@ -3,6 +3,7 @@ import Base from '../../layouts/Base.astro';
 import { getCollection } from 'astro:content';
 import { byName } from '../../categories';
 import { getAuthor } from '../../authors';
+import { fmtDate, catLabel } from '../../lang';
 export async function getStaticPaths() {
   const posts = await getCollection('articles');
   return posts.map((post) => ({ params: { slug: post.slug }, props: { post } }));
@@ -10,9 +11,8 @@ export async function getStaticPaths() {
 const { post } = Astro.props;
 const { Content } = await post.render();
 const d = post.data;
-const date = d.date.toLocaleDateString(d.lang === 'en' ? 'en-GB' : 'el-GR', { year: 'numeric', month: 'long', day: 'numeric' });
 const c = byName(d.category);
-const cat = c ? (d.lang === 'en' ? c.en : c.el) : d.category;
+const cat = c ? catLabel(c, d.lang) : d.category;
 const author = await getAuthor(d.author);
 const hasBio = !!(author && author.entry && author.entry.body.trim().length > 0);
 const Bio = hasBio ? (await author.entry.render()).Content : null;
@@ -20,7 +20,7 @@ const Bio = hasBio ? (await author.entry.render()).Content : null;
 <Base title={d.title} description={d.summary} image={d.image}>
   <article lang={d.lang}>
     <h1>{d.title}</h1>
-    <p class="muted small">{cat} · {date}{author && <> · {author.name}</>}</p>
+    <p class="muted small">{cat} · {fmtDate(d.date, d.lang)}{author && <> · {author.name}</>}</p>
     {d.image && (
       <figure class="hero">
         <img src={d.image} alt={d.imageAlt ?? ''} />

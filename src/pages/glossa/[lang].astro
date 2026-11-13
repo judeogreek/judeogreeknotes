@@ -1,0 +1,19 @@
+---
+import Base from '../../layouts/Base.astro';
+import ArticleList from '../../components/ArticleList.astro';
+import { getCollection } from 'astro:content';
+import { langNames } from '../../lang';
+export async function getStaticPaths() {
+  const all = await getCollection('articles');
+  const langs = [...new Set(all.map((p) => p.data.lang))];
+  return langs.map((lang) => ({
+    params: { lang },
+    props: { lang, posts: all.filter((p) => p.data.lang === lang).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf()) },
+  }));
+}
+const { lang, posts } = Astro.props;
+---
+<Base title={langNames[lang]}>
+  <h1 lang={lang}>{langNames[lang]}</h1>
+  <ArticleList posts={posts} />
+</Base>
